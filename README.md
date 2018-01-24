@@ -3,7 +3,9 @@ PDSB
 
 ## Get the files
 Q1. Download the following data files from the internet using the curl command: http://eaton-lab.org/pdsb/test.fastq.gz and http://eaton-lab.org/pdsb/iris-data-dirty.csv. Use the less or zless commands to look at the files. Then use the head command to print the first 5 lines from each file as output.
-A1. Get the file from the internet using curl (with -O to suppress the output from the screen). 
+
+A1. Get the file from the internet using curl (with -O to suppress the output from the screen). Then use zless to look at the files. Before printing lines the file needs to ge unzipped if zipped (*.gz). 
+
 Sources:
 - for curl syntax: https://www.thegeekstuff.com/2012/07/wget-curl 
 
