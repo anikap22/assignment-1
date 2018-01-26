@@ -51,10 +51,52 @@ Output:
 
 ## Clean the data
 Q1. Use grep, uniq, sed. Check that all of the species names are spelled correctly in the file iris-data-dirty.csv. Also check for missing values stored as NA. Create a new file where mispelled names are replaced with the correct values, and lines with NA are excluded, and save it as iris-data-clean.csv. Use cut, sort and uniq to list the number of data values there are for each species in the new cleaned data file.
-A1.
-Sources
-Code block
+
+To look for misspellings I sorted the file by unique using sort -u based on the 5th column. Misspellings: "versicolour" for "versicolor"; "setsa" for "setosa"
+
+Sources: https://stackoverflow.com/questions/1915636/is-there-a-way-to-uniq-by-column (to find unique from a sort)
+
+Code block:
+Look for misspelling:
+```bash
+sort -u -t "," -k5,5 iris-data-dirty.csv
+```
 Code block - copied answer
+```bash
+5.1,3.5,1.4,0.2,Iris-setosa
+4.8,3.4,1.6,0.2,Iris-setsa
+7.0,3.2,4.7,1.4,Iris-versicolor
+6.3,3.3,6.0,2.5,Iris-virginica
+```
+
+To check for missing values stored as NA I used grep which searches for a string. I found two lines with NAs.
+Code block:
+```bash
+grep "NA" iris-data-dirty.csv
+```
+Output:
+```bash
+6.3,NA,4.9,1.5,Iris-versicolor
+5.6,NA,4.1,1.3,Iris-versicolor
+```
+
+To create a new file where misspelled names are replaced with the correct values, I used sed to replace. The > sign was used to store the output as a new file. NA values were removed by reverse selecting them with grep -v. To check that this worked we can repeat the commands from the first two parts. This shows that we have eliminated all NAs and all misspellings.
+Sources: https://stackoverflow.com/questions/26568952/how-to-replace-multiple-patterns-at-once-with-sed was used to figure out how to replace multiple patterns in one go.
+
+Code block:
+```bash
+grep -v "NA" iris-data-dirty.csv | sed -e 's/versicolour/versicolor/g;s/setsa/setosa/g' > iris-data-clean.csv
+```
+When you look for unique Iris+wildcard it results in
+```bash
+5.1,3.5,1.4,0.2,Iris-setosa
+7.0,3.2,4.7,1.4,Iris-versicolor
+6.3,3.3,6.0,2.5,Iris-virginica
+```
+
+To list the number of data values there XXXX
+Code block:
+
 
 ## Summarize sequence data file
 Q1. Find how many lines in the data file test.fastq.gz start with "TGCAG" and end with "GAG"
