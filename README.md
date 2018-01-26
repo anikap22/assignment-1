@@ -48,9 +48,8 @@ Output:
 5.0,3.6,1.4,0.2,Iris-setosa
 ```
 
-
 ## Clean the data
-Q1. Use grep, uniq, sed. Check that all of the species names are spelled correctly in the file iris-data-dirty.csv. Also check for missing values stored as NA. Create a new file where mispelled names are replaced with the correct values, and lines with NA are excluded, and save it as iris-data-clean.csv. Use cut, sort and uniq to list the number of data values there are for each species in the new cleaned data file.
+Q2. Use grep, uniq, sed. Check that all of the species names are spelled correctly in the file iris-data-dirty.csv. Also check for missing values stored as NA. Create a new file where mispelled names are replaced with the correct values, and lines with NA are excluded, and save it as iris-data-clean.csv. Use cut, sort and uniq to list the number of data values there are for each species in the new cleaned data file.
 
 To look for misspellings I sorted the file by unique using sort -u based on the 5th column. Misspellings: "versicolour" for "versicolor"; "setsa" for "setosa"
 
@@ -94,19 +93,27 @@ When you look for unique Iris+wildcard it results in
 6.3,3.3,6.0,2.5,Iris-virginica
 ```
 
-To list the number of data values there XXXX
+To list the number of data values there are in the cleaned file use cut, then sort, than uniq -c to count the instances of each unique. cut -f5 gets us only the 5th column (species name) and -d "," tells unix that the file is comma delimited. 
 Code block:
-
+```bash
+cut -f5 -d "," iris-data-clean.csv | sort | uniq -c
+```
+Which gives the output:
+```bash
+     50 Iris-setosa
+     48 Iris-versicolor
+     50 Iris-virginica
+```
 
 ## Summarize sequence data file
-Q1. Find how many lines in the data file test.fastq.gz start with "TGCAG" and end with "GAG"
+Q3. Find how many lines in the data file test.fastq.gz start with "TGCAG" and end with "GAG"
 A1.
 Sources
 Code block
 Code block - copied answer
 
 ## Summarize sequence data file
-Q1. Write a for-loop to separate the reads from the file test.fastq.gz based on the taxon name in the label, and write the reads to separately named files in the new directory called sorted_reads/. The answer to this question will require more than a single line. See the lecture materials about using variables in for-loops. This will also be tricky because each read in the data file spans four lines (this is a standard genetic sequence file format), so for each read that you correctly identify you must grab the line with the sequence data below it, as well as the repeat label after that, and the quality information line after that. For a hint, see additional options for the grep command that can be used to select multiple lines.
+Q4. Write a for-loop to separate the reads from the file test.fastq.gz based on the taxon name in the label, and write the reads to separately named files in the new directory called sorted_reads/. The answer to this question will require more than a single line. See the lecture materials about using variables in for-loops. This will also be tricky because each read in the data file spans four lines (this is a standard genetic sequence file format), so for each read that you correctly identify you must grab the line with the sequence data below it, as well as the repeat label after that, and the quality information line after that. For a hint, see additional options for the grep command that can be used to select multiple lines.
 A1.
 Sources
 Code block
