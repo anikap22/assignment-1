@@ -64,7 +64,8 @@ Code block - copied answer
 ```bash
 5.1,3.5,1.4,0.2,Iris-setosa
 4.8,3.4,1.6,0.2,Iris-setsa
-7.0,3.2,4.7,1.4,Iris-versicolor
+6.4,3.2,4.5,1.5,Iris-versicolor
+7.0,3.2,4.7,1.4,Iris-versicolour
 6.3,3.3,6.0,2.5,Iris-virginica
 ```
 
@@ -107,10 +108,18 @@ Which gives the output:
 
 ## Summarize sequence data file
 Q3. Find how many lines in the data file test.fastq.gz start with "TGCAG" and end with "GAG"
-A1.
-Sources
-Code block
+Since the file is zipped we start with zcat and then use grep twice for the two different filtering criteria. Starting grep with ^ indicates the string should start with that pattern and ending it with $ indicates the string should end with that. Wc -l is used to count the number of lines. In total there are 44 lines that match the patterns. 
+
+Sources: https://www.tecmint.com/wc-command-examples/ for the line count command; http://www.robelle.com/smugbook/regexpr.html for how to indicate the line should start or end with that pattern.
+
+Code block:
+```bash
+zcat test.fastq.gz | grep "^TGCAG" | grep "GAG$" | wc -l
+```
 Code block - copied answer
+```
+44
+```
 
 ## Summarize sequence data file
 Q4. Write a for-loop to separate the reads from the file test.fastq.gz based on the taxon name in the label, and write the reads to separately named files in the new directory called sorted_reads/. The answer to this question will require more than a single line. See the lecture materials about using variables in for-loops. This will also be tricky because each read in the data file spans four lines (this is a standard genetic sequence file format), so for each read that you correctly identify you must grab the line with the sequence data below it, as well as the repeat label after that, and the quality information line after that. For a hint, see additional options for the grep command that can be used to select multiple lines.
