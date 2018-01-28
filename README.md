@@ -81,6 +81,7 @@ Output:
 ```
 
 To create a new file where misspelled names are replaced with the correct values, I used sed to replace. The > sign was used to store the output as a new file. NA values were removed by reverse selecting them with grep -v. To check that this worked we can repeat the commands from the first two parts. This shows that we have eliminated all NAs and all misspellings.
+
 Sources: https://stackoverflow.com/questions/26568952/how-to-replace-multiple-patterns-at-once-with-sed was used to figure out how to replace multiple patterns in one go.
 
 Code block:
@@ -108,6 +109,7 @@ Which gives the output:
 
 ## Summarize sequence data file
 Q3. Find how many lines in the data file test.fastq.gz start with "TGCAG" and end with "GAG"
+
 Since the file is zipped we start with zcat and then use grep twice for the two different filtering criteria. Starting grep with ^ indicates the string should start with that pattern and ending it with $ indicates the string should end with that. Wc -l is used to count the number of lines. In total there are 44 lines that match the patterns. 
 
 Sources: https://www.tecmint.com/wc-command-examples/ for the line count command; http://www.robelle.com/smugbook/regexpr.html for how to indicate the line should start or end with that pattern.
@@ -116,14 +118,42 @@ Code block:
 ```bash
 zcat test.fastq.gz | grep "^TGCAG" | grep "GAG$" | wc -l
 ```
-Code block - copied answer
+Output:
 ```
 44
 ```
 
 ## Summarize sequence data file
 Q4. Write a for-loop to separate the reads from the file test.fastq.gz based on the taxon name in the label, and write the reads to separately named files in the new directory called sorted_reads/. The answer to this question will require more than a single line. See the lecture materials about using variables in for-loops. This will also be tricky because each read in the data file spans four lines (this is a standard genetic sequence file format), so for each read that you correctly identify you must grab the line with the sequence data below it, as well as the repeat label after that, and the quality information line after that. For a hint, see additional options for the grep command that can be used to select multiple lines.
-A1.
-Sources
-Code block
-Code block - copied answer
+
+The strategy was to get the unique taxa names using grep, cut, uniq, and sort (there is probably a more efficient way to do this but I did get the unique list). Then use a for loop to iterate through the reads and identify the taxon and send matching reads to output file. Grep -A4 selected the four lines after the pattern match. I first made the output file and then moved it to the sorted reads folder.
+
+Sources: http://www.compciv.org/bash-guide/ for how to do for loops in bash; https://stackoverflow.com/questions/7427262/how-to-read-a-file-into-a-variable-in-shell for how to get a text file stored back into a variable. 
+
+Code block:
+```bash
+#Get species names:
+zcat test.fastq.gz | grep '^@[0-9]' | cut -d "." -f 1 | uniq -c | sort -nr > test.txt
+cat test.txt | grep '^_*' | cut -d "_" -f 2 | sort -nr | uniq > list.txt
+```
+Output:
+```bash
+thamno
+superba
+rex
+przewalskii
+cyathophylloides
+cyathophylla
+```
+Code block:
+```bash
+#make directory
+mkdir sorted_reads
+```
+```bash
+#convert list of taxa back to a variable (from stored file)
+value=`cat list.txt`
+#for loop iterating across taxa (in $value)
+for var1 in $value; do zcat test.fastq.gz | grep -A4 "^@[0-9][0-9][0-9][0-9][0-9]_$var1" > $var1.txt; mv $var1.txt ~/sorted_reads; done
+```
+Nothing to show for the output since it wrote the information to files and then moved those files to the new folder.
